@@ -621,6 +621,13 @@ input[type="number"].show-spinner::-webkit-inner-spin-button { -webkit-appearanc
   border-bottom: 1px solid var(--border-light);
 }
 
+.cost-breakdown-table th:nth-child(5),
+.cost-breakdown-table td:nth-child(5),
+.cost-breakdown-table th:nth-child(6),
+.cost-breakdown-table td:nth-child(6) {
+  min-width: 100px;
+}
+
 .cost-breakdown-table tr:last-child td { border-bottom: none; }
 
 .cost-breakdown-table .total-row td {
