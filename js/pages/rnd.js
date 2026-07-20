@@ -213,6 +213,8 @@ async function saveRecipe() {
   try {
     if (rndEditingId) {
       var existing = await getRecipe(rndEditingId);
+      if (!existing) { showToast(t('rnd.recipeNotFound')); return; }
+      var costs = recalcCost(ingredients, existing, targetVolume, servingSize);
       var recipe = {
         name: name,
         targetVolume: targetVolume,
@@ -229,8 +231,8 @@ async function saveRecipe() {
             pkgPrice: oldIng ? oldIng.pkgPrice : null,
           };
         }),
-        costPerLiter: recalcCost(ingredients, existing, targetVolume, servingSize).costPerLiter,
-        costPerServing: recalcCost(ingredients, existing, targetVolume, servingSize).costPerServing,
+        costPerLiter: costs.costPerLiter,
+        costPerServing: costs.costPerServing,
       };
       await updateRecipe(rndEditingId, recipe);
       await syncProductFromRecipe(rndEditingId, recipe, existing);
@@ -302,7 +304,7 @@ async function syncProductFromRecipe(recipeId, recipe, existing) {
         date: product.date || new Date().toISOString(),
       });
     }
-  } catch(e) {}
+  } catch(e) { console.warn('syncProduct error:', e); }
 }
 
 function resetRNDForm() {
